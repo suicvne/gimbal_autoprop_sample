@@ -3,8 +3,8 @@
 #include "gimbal/gimbal_core.h"
 
 // Pre-amble for auto prop getters/setters
-#define GBL_AUTOPROP_GEN_GETTER 1
-#include "gimbal_autoprop.h"
+// #define GBL_AUTOPROP_GEN_GETTER 1
+// #include "gimbal_autoprop.h"
 
 // Standard object definition.
 // When this header is included, the definition of the GBL_PROPERTIES macro is now changed.
@@ -16,6 +16,81 @@
 // Forward declaring instance function(s)
 static GBL_RESULT SampleObject_PrintValues(GBL_SELF);
 static GBL_RESULT SampleObject_PrintValuesFromProps(GBL_SELF);
+
+static GBL_RESULT SampleObject_GblObject_property_(const GblObject *pObject,
+                                                   const GblProperty *pProp,
+                                                   GblVariant *pValue) {
+  SampleObject *pObj = ((SampleObject *)GblInstance_cast((GblInstance *)pObject,
+                                                         SampleObject_type()));
+  if ((pProp->flags & GBL_PROPERTY_FLAG_READ) == 0) {
+    return GBL_RESULT_ERROR_INVALID_KEY;
+  }
+  switch (pProp->id) {
+  case SampleObject_Property_Id_pStringValue: {
+    GblVariant_setValueCopy(pValue, ((GblType_fromBuiltinIndex(17))),
+                            pObj->pStringValue);
+    break;
+  }
+  case SampleObject_Property_Id_CharValue: {
+    GblVariant_setValueCopy(pValue, ((GblType_fromBuiltinIndex(7))),
+                            pObj->CharValue);
+    break;
+  }
+  case SampleObject_Property_Id_BoolValue: {
+    GblVariant_setValueCopy(pValue, ((GblType_fromBuiltinIndex(6))),
+                            pObj->BoolValue);
+    break;
+  }
+  case SampleObject_Property_Id_Int16Value: {
+    GblVariant_setValueCopy(pValue, ((GblType_fromBuiltinIndex(9))),
+                            pObj->Int16Value);
+    break;
+  }
+  case SampleObject_Property_Id_Int32Value: {
+    GblVariant_setValueCopy(pValue, ((GblType_fromBuiltinIndex(11))),
+                            pObj->Int32Value);
+    break;
+  }
+  case SampleObject_Property_Id_Int64Value: {
+    GblVariant_setValueCopy(pValue, ((GblType_fromBuiltinIndex(13))),
+                            pObj->Int64Value);
+    break;
+  }
+  case SampleObject_Property_Id_UInt8Value: {
+    GblVariant_setValueCopy(pValue, ((GblType_fromBuiltinIndex(8))),
+                            pObj->UInt8Value);
+    break;
+  }
+  case SampleObject_Property_Id_UInt16Value: {
+    GblVariant_setValueCopy(pValue, ((GblType_fromBuiltinIndex(10))),
+                            pObj->UInt16Value);
+    break;
+  }
+  case SampleObject_Property_Id_UInt32Value: {
+    GblVariant_setValueCopy(pValue, ((GblType_fromBuiltinIndex(12))),
+                            pObj->UInt32Value);
+    break;
+  }
+  case SampleObject_Property_Id_UInt64Value: {
+    GblVariant_setValueCopy(pValue, ((GblType_fromBuiltinIndex(14))),
+                            pObj->UInt64Value);
+    break;
+  }
+  case SampleObject_Property_Id_pPointerValue: {
+    GblVariant_setValueCopy(pValue, ((GblType_fromBuiltinIndex(18))),
+                            pObj->pPointerValue);
+    break;
+  }
+  case SampleObject_Property_Id_pObjectPointerValue: {
+    GblVariant_setValueCopy(pValue, (GblObject_type()),
+                            pObj->pObjectPointerValue);
+    break;
+  }
+  default:
+    return GBL_RESULT_ERROR_INVALID_PROPERTY;
+  }
+  return GBL_RESULT_SUCCESS;
+};
 
 // ============================================= Class/type init =============================================
 
@@ -117,7 +192,8 @@ static GBL_RESULT SampleObject_PrintValuesFromProps(GBL_SELF)
 
     #define PRINT_PROP(PROP_NAME) \
         do {\
-            GblObject_property((GblObject*)pSelf, #PROP_NAME, &OutVariant);\
+            OutVariant = (GblVariant){ 0 };\
+            GblObject_propertyVariant((GblObject*)pSelf, #PROP_NAME, &OutVariant);\
             GBL_CTX_INFO(" %s = %s", #PROP_NAME, GblVariant_toString(&OutVariant));\
         } while(0)\
 
@@ -125,7 +201,7 @@ static GBL_RESULT SampleObject_PrintValuesFromProps(GBL_SELF)
     
 
     GBL_LOG_PUSH();
-        // PRINT_PROP(pStringValue);
+        PRINT_PROP(pStringValue);
         PRINT_PROP(CharValue);
         PRINT_PROP(BoolValue);
         PRINT_PROP(Int16Value);
@@ -135,7 +211,7 @@ static GBL_RESULT SampleObject_PrintValuesFromProps(GBL_SELF)
         PRINT_PROP(UInt16Value);
         PRINT_PROP(UInt32Value);
         PRINT_PROP(UInt64Value);
-        PRINT_PROP(pStringValue);
+        PRINT_PROP(pPointerValue);
         PRINT_PROP(pObjectPointerValue);
     GBL_LOG_POP(1);
 
