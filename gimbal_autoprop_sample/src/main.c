@@ -2,12 +2,14 @@
 
 int main(int argc, const char** pArgv)
 {
+    GBL_CTX_BEGIN(NULL);
+
     // Construct instance of our sample object,
     // print values, then destruct
     SampleObject Obj = SampleObject_Create();
-    Obj.pClass->PrintValues(&Obj);
-    Obj.pClass->PrintValuesFromProps(&Obj);
+    GBL_VCALL(SampleObject, PrintValues, &Obj);
+    GBL_VCALL(SampleObject, PrintValuesFromProps, &Obj);
     SampleObject_DestroySelf(&Obj);
-    
-    return 0;
+
+    GBL_CTX_END();
 }
