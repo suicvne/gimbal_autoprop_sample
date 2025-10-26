@@ -1,6 +1,7 @@
 // HACK: Have to include this first so only SampleObject's header is actually
 //       "processed".
 #include "gimbal/gimbal_core.h"
+#include <inttypes.h> // for PRId64 PRIx64
 
 // Pre-amble for auto prop getters/setters
 #define GBL_AUTOPROP_GEN_GETTER 1
@@ -75,11 +76,11 @@ extern inline SampleObject SampleObject_Create()
     NewInst.CharValue = 'T';
     NewInst.Int16Value = -32767;
     NewInst.Int32Value = -42049850;
-    NewInst.Int64Value = -430295820349582;
+    NewInst.Int64Value = INT64_MIN;
     NewInst.UInt8Value = 255;
     NewInst.UInt16Value = 65535;
     NewInst.UInt32Value = 430529293;
-    NewInst.UInt64Value = 5209835209820;
+    NewInst.UInt64Value = UINT64_MAX;
 
     return NewInst;
 }
@@ -99,11 +100,11 @@ static GBL_RESULT SampleObject_PrintValues(GBL_SELF)
         GBL_CTX_INFO(" BoolValue=%d", pSelf->BoolValue);
         GBL_CTX_INFO(" Int16Value=%d", pSelf->Int16Value);
         GBL_CTX_INFO(" Int32Value=%d", pSelf->Int32Value);
-        GBL_CTX_INFO(" Int64Value=%d", pSelf->Int64Value);
+        GBL_CTX_INFO(" Int64Value=%" PRId64, pSelf->Int64Value);
         GBL_CTX_INFO(" UInt8Value=%u", pSelf->UInt8Value);
         GBL_CTX_INFO(" UInt16Value=%u", pSelf->UInt16Value);
         GBL_CTX_INFO(" UInt32Value=%u", pSelf->UInt32Value);
-        GBL_CTX_INFO(" UInt64Value=%u", pSelf->UInt64Value);
+        GBL_CTX_INFO(" UInt64Value=%llu", pSelf->UInt64Value);
         GBL_CTX_INFO(" pPointerValue=%p", pSelf->pStringValue);
         GBL_CTX_INFO(" pObjectPointerValue=%p", pSelf->pObjectPointerValue);
     GBL_LOG_POP(1);
