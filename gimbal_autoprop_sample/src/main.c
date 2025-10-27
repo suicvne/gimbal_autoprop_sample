@@ -7,6 +7,8 @@ int main(int argc, const char** pArgv)
     // Construct instance of our sample object,
     // print values, then destruct
     SampleObject Obj = SampleObject_Create();
+    Obj.pPointerValue = &Obj;
+
     GBL_VCALL(SampleObject, PrintValues, &Obj);
     GBL_VCALL(SampleObject, PrintValuesFromProps, &Obj);
     SampleObject_DestroySelf(&Obj);
